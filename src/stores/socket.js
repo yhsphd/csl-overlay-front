@@ -1,4 +1,4 @@
-import { rootUrl } from "@/assets/utils.js";
+import { deepMerge, rootUrl } from "@/assets/utils.js";
 import { ref } from "vue";
 import { io } from "socket.io-client";
 import { defineStore } from "pinia";
@@ -18,14 +18,19 @@ export const useOverlayDataStore = defineStore("overlayData", () => {
     socket.on("disconnect", () => {
       connected.value = false;
     });
-    socket.on("update", function (res) {
-      Object.assign(data.value, res);
+    socket.on("update", (res) => {
+      // Update existing object without replacing it
+      deepMerge(data.value, res);
     });
+  }
+
+  function sendEvent(name, value) {
+    socket.emit(name, value);
   }
 
   function connect() {
     socket.connect();
   }
 
-  return { connected, data, bindEvents, connect };
+  return { connected, data, bindEvents, sendEvent, connect };
 });

@@ -58,3 +58,38 @@ export function splitCode(code) {
   const index = code.match(/\d+/g);
   return [mod, index !== "" ? parseInt(index) : 1];
 }
+
+export function deepMerge(target, source) {
+  if (typeof target !== "object" || target === null) {
+    // If the target is not an object or is null, replace it entirely
+    return source;
+  }
+
+  if (Array.isArray(target) && Array.isArray(source)) {
+    // For arrays, replace with the source array or implement custom merging logic if needed
+    if (target.length <= source.length) {
+      return [...source];
+    }
+    return source;
+  }
+
+  // Remove keys from the target that are not in the source
+  for (const key of Object.keys(target)) {
+    if (!(key in source)) {
+      delete target[key];
+    }
+  }
+
+  // Merge each key in the source into the target
+  for (const key of Object.keys(source)) {
+    if (typeof source[key] === "object" && source[key] !== null) {
+      // Recursively merge objects
+      target[key] = deepMerge(target[key] || {}, source[key]);
+    } else {
+      // Replace primitives and non-object values
+      target[key] = source[key];
+    }
+  }
+
+  return target;
+}

@@ -14,8 +14,6 @@ state.connect();
 
 <style scoped>
 RouterView {
-  width: 1920px;
-  height: 1080px;
   margin: 0;
   padding: 0;
 }

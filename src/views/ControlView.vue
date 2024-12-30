@@ -1,31 +1,42 @@
 <script setup>
-import { ref, computed } from "vue";
 import { useOverlayDataStore } from "@/stores/socket";
-import { JsonViewer } from "vue3-json-viewer";
-import "vue3-json-viewer/dist/index.css";
+import OverlayDataPreview from "@/components/ControlView/OverlayDataPreview.vue";
+import TimerSetControl from "@/components/ControlView/TimerSetControl.vue";
 
 const state = useOverlayDataStore();
-const overlayDataSampled = ref({});
 
-setInterval(() => {
-  overlayDataSampled.value = Object.assign(overlayDataSampled.value, state.data);
-}, 1000);
+function testfunc() {
+  state.sendEvent("control", "asdf");
+}
 </script>
 
 <template>
   <div class="master-control-view">
     <h1>Circles in SEOUL</h1>
-    <h2>Main event overlay</h2>
-    <h3>CONTROL PANEL</h3>
-    <div>
-      <JsonViewer :value="overlayDataSampled" :expandDepth="4"></JsonViewer>
-    </div>
+    <h2>Main event overlay CONTROL PANEL</h2>
+
+    <div class="control-divider"></div>
+
+    <h3>Person Card</h3>
+
+    <div class="control-divider"></div>
+
+    <h3>Timer Set</h3>
+    <TimerSetControl></TimerSetControl>
+
+    <div class="control-divider"></div>
+
+    <h3>OverlayData Preview</h3>
+    <OverlayDataPreview></OverlayDataPreview>
+
+    <button v-on:click="testfunc()">dsfsdgdfhdf</button>
   </div>
 </template>
 
 <style scoped>
-.master-control-view {
-  width: 1920px;
-  height: 1080px;
+.control-divider {
+  width: 100%;
+  height: 2px;
+  background-color: gray;
 }
 </style>

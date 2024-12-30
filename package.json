@@ -11,6 +11,7 @@
     "format": "prettier --write ."
   },
   "dependencies": {
+    "@vuepic/vue-datepicker": "^10.0.0",
     "pinia": "^2.3.0",
     "socket.io-client": "^4.8.1",
     "v-object-inspector": "^0.1.3",
