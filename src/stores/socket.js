@@ -28,9 +28,13 @@ export const useOverlayDataStore = defineStore("overlayData", () => {
     socket.emit(name, value);
   }
 
+  function sendControlEvent(type, data) {
+    sendEvent("control", { type, data });
+  }
+
   function connect() {
     socket.connect();
   }
 
-  return { connected, data, bindEvents, sendEvent, connect };
+  return { connected, data, bindEvents, sendEvent, sendControlEvent, connect };
 });

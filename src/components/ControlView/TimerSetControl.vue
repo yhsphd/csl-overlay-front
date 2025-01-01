@@ -1,54 +1,101 @@
 <script setup>
 import { ref, computed, onMounted } from "vue";
-import VueDatePicker from "@vuepic/vue-datepicker";
-import "@vuepic/vue-datepicker/dist/main.css";
 import { useOverlayDataStore } from "@/stores/socket";
-import { secondsToMMSS } from "@/assets/utils";
+import { secondsToMMSS, toISOStringTimezoneOffset } from "@/assets/utils";
+import HmsSelection from "./HmsSelection.vue";
 
 const state = useOverlayDataStore();
 
-const date = ref(new Date());
 const secondsLeft = ref(0);
+const durationSelection = ref([0, 0, 0]);
+const deadlineSelection = ref([0, 0, 0]);
 
 const timeLeftString = computed(() => {
   return (secondsLeft.value < 0 ? "-" : "") + secondsToMMSS(secondsLeft.value);
 });
 
+function setValue(type) {
+  let target = new Date();
+  const durationMs =
+    1000 *
+    (durationSelection.value[2] +
+      60 * (durationSelection.value[1] + 60 * durationSelection.value[0]));
+  switch (type) {
+    case "duration":
+      target = new Date(new Date().getTime() + durationMs);
+      break;
+    case "deadline":
+      target.setHours(deadlineSelection.value[0]);
+      target.setMinutes(deadlineSelection.value[1]);
+      target.setSeconds(deadlineSelection.value[2]);
+      break;
+  }
+  // SEND EVENT TO BACKEND
+  state.sendControlEvent("scheduleUpdate", target.toISOString());
+  alert("Timer updated to " + toISOStringTimezoneOffset(target));
+}
+
+function resetValue(type) {
+  const curr = new Date();
+  switch (type) {
+    case "duration":
+      durationSelection.value = [0, 0, 0];
+      break;
+    case "deadline":
+      deadlineSelection.value = [curr.getHours(), curr.getMinutes(), curr.getSeconds()];
+      break;
+  }
+}
+
 onMounted(() => {
   setInterval(() => {
     secondsLeft.value = (new Date(state.data.schedule) - new Date()) / 1000;
   }, 100);
+
+  resetValue("deadline");
 });
 </script>
 
 <template>
   <div class="master-timerset-control">
-    <div class="section">
-      <div>Current Timer</div>
-      <div>{{ state.data.schedule }}</div>
-      <div>{{ timeLeftString }}</div>
-    </div>
-    <div class="section">
-      <div>Set by duration</div>
-      <input type="number" class="durationInput" />
-      :
-      <input type="number" class="durationInput" />
-      <br />
-      <button>SET</button>
-    </div>
-    <div class="section">
-      <div>Set by deadline</div>
-      <VueDatePicker
-        v-model="date"
-        time-picker
-        inline
-        enable-seconds
-        auto-apply
-        seconds-increment="5"
-      ></VueDatePicker>
-      <div>{{ date }}</div>
-      <button>SET</button>
-    </div>
+    <table class="wrapper">
+      <tbody>
+        <tr>
+          <td colspan="2">
+            <div>Current Time</div>
+            <div class="mono">{{ toISOStringTimezoneOffset(new Date()) }}</div>
+          </td>
+        </tr>
+        <tr>
+          <td colspan="2">
+            <div>Current Timer</div>
+            <div class="mono">{{ toISOStringTimezoneOffset(state.data.schedule) }}</div>
+          </td>
+        </tr>
+        <tr>
+          <td colspan="2">
+            <div>Time Left</div>
+            <div class="mono">{{ timeLeftString }}</div>
+          </td>
+        </tr>
+        <tr>
+          <td>
+            <div>Set by Duration</div>
+            <HmsSelection class="hms" v-model="durationSelection"></HmsSelection>
+            <!-- <div>{{ durationSelection }}</div> -->
+            <button @click="resetValue('duration')">RESET</button>
+            <button @click="setValue('duration')">SET</button>
+          </td>
+          <td>
+            <div>Set by Deadline</div>
+            <HmsSelection class="hms" v-model="deadlineSelection"></HmsSelection>
+            <!-- <div>{{ deadlineSelection }}</div> -->
+            <button @click="resetValue('deadline')">RESET</button>
+            <button @click="setValue('deadline')">SET</button>
+          </td>
+        </tr>
+      </tbody>
+    </table>
   </div>
 </template>
 
@@ -57,13 +104,23 @@ onMounted(() => {
   display: flex;
 }
 
-.section {
-  border: solid gray 2px;
-  margin: 8px;
-  padding: 16px;
+table,
+th,
+td {
+  border: 2px solid gray;
+  border-collapse: collapse;
+  text-align: center;
 }
 
-.durationInput {
-  width: 30px;
+table {
+  margin: 8px;
+}
+
+td {
+  padding: 4px;
+}
+
+.hms {
+  margin: 8px;
 }
 </style>
