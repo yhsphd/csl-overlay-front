@@ -83,15 +83,15 @@ onMounted(() => {
             <div>Set by Duration</div>
             <HmsSelection class="hms" v-model="durationSelection"></HmsSelection>
             <!-- <div>{{ durationSelection }}</div> -->
-            <button @click="resetValue('duration')">RESET</button>
-            <button @click="setValue('duration')">SET</button>
+            <button @click="resetValue('duration')">Reset</button>
+            <button @click="setValue('duration')" class="control-trigger">S E T</button>
           </td>
           <td>
             <div>Set by Deadline</div>
             <HmsSelection class="hms" v-model="deadlineSelection"></HmsSelection>
             <!-- <div>{{ deadlineSelection }}</div> -->
-            <button @click="resetValue('deadline')">RESET</button>
-            <button @click="setValue('deadline')">SET</button>
+            <button @click="resetValue('deadline')">Reset</button>
+            <button @click="setValue('deadline')" class="control-trigger">S E T</button>
           </td>
         </tr>
       </tbody>

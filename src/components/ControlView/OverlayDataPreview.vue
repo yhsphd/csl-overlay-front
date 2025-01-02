@@ -17,7 +17,6 @@ const state = useOverlayDataStore();
 <style scoped>
 .wrapper {
   border: solid gray 1px;
-  max-height: 400px;
   overflow-y: scroll;
 }
 </style>

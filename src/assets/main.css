@@ -1,1 +1,15 @@
 @import "./base.css";
+
+.mono {
+  font-family: monospace, monospace;
+}
+
+.control-trigger {
+  font-weight: 900;
+  border: solid red 4px;
+}
+
+.horizontal-box {
+  display: flex;
+  flex-direction: row;
+}
