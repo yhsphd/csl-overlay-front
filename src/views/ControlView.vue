@@ -1,18 +1,13 @@
 <script setup>
-import { ref, computed } from "vue";
+import { ref } from "vue";
 import { useOverlayDataStore } from "@/stores/socket";
 import OverlayDataPreview from "@/components/ControlView/OverlayDataPreview.vue";
 import TimerSetControl from "@/components/ControlView/TimerSetControl.vue";
 import PersonCardControl from "@/components/ControlView/PersonCardControl.vue";
+import ConnectionInfo from "@/components/ConnectionInfo.vue";
 
 const state = useOverlayDataStore();
 
-const currentUri = computed(() => {
-  const res = state.getURI();
-  return res ? res : "";
-});
-
-const connected = computed(() => state.connected);
 const stagedRootUrl = ref();
 
 function reconnect() {
@@ -27,9 +22,7 @@ function reconnect() {
 
     <div class="control-divider"></div>
 
-    <div class="control">
-      Currently {{ connected ? "connected to: " + currentUri : "disconnected" }}
-    </div>
+    <ConnectionInfo class="control"></ConnectionInfo>
     <div class="horizontal-box control">
       <div>Change Root URL:</div>
       <div style="width: 8px"></div>

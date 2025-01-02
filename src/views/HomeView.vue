@@ -1,9 +1,10 @@
 <script setup>
-import TheWelcome from "../components/TheWelcome.vue";
+import ConnectionInfo from "@/components/ConnectionInfo.vue";
 </script>
 
 <template>
   <main>
-    <TheWelcome />
+    <ConnectionInfo></ConnectionInfo>
+    <router-link to="control">Control Panel</router-link>
   </main>
 </template>
