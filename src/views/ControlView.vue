@@ -1,16 +1,41 @@
 <script setup>
+import { ref, computed } from "vue";
 import { useOverlayDataStore } from "@/stores/socket";
 import OverlayDataPreview from "@/components/ControlView/OverlayDataPreview.vue";
 import TimerSetControl from "@/components/ControlView/TimerSetControl.vue";
 import PersonCardControl from "@/components/ControlView/PersonCardControl.vue";
 
 const state = useOverlayDataStore();
+
+const currentUri = computed(() => {
+  const res = state.getURI();
+  return res ? res : "";
+});
+
+const connected = computed(() => state.connected);
+const stagedRootUrl = ref();
+
+function reconnect() {
+  state.reconnectTo(stagedRootUrl.value);
+}
 </script>
 
 <template>
   <div class="master-control-view">
     <h1>Circles in SEOUL</h1>
     <h2>Main event overlay CONTROL PANEL</h2>
+
+    <div class="control-divider"></div>
+
+    <div class="control">
+      Currently {{ connected ? "connected to: " + currentUri : "disconnected" }}
+    </div>
+    <div class="horizontal-box control">
+      <div>Change Root URL:</div>
+      <div style="width: 8px"></div>
+      <input v-model="stagedRootUrl" @keyup.enter="reconnect()" />
+      <button @click="reconnect()">Reconnect</button>
+    </div>
 
     <div class="control-divider"></div>
 
@@ -41,5 +66,9 @@ td {
   width: 100%;
   height: 2px;
   background-color: gray;
+}
+
+.control {
+  margin: 16px;
 }
 </style>

@@ -1,6 +1,7 @@
 <script setup>
 import { useOverlayDataStore } from "@/stores/socket";
 import { ref, computed } from "vue";
+import RangeDropdown from "../RangeDropdown.vue";
 
 const state = useOverlayDataStore();
 
@@ -30,7 +31,7 @@ function sendTrigger() {
   <div class="master-personcard-control">
     <div class="horizontal-box control">
       <div>Count:</div>
-      <input class="numInput" type="number" min="1" max="3" v-model="count" />
+      <RangeDropdown class="numInput" v-model="count" range="4"></RangeDropdown>
       <div class="vertical-divider"></div>
       <div>Duration (s):</div>
       <input class="numInput" type="number" v-model="duration" />
