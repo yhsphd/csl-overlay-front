@@ -14,6 +14,16 @@ const router = createRouter({
       name: "control",
       component: () => import("../views/ControlView.vue"),
     },
+    {
+      path: "/overlay",
+      name: "scenes",
+      component: () => import("../views/ScenesView.vue"),
+    },
+    {
+      path: "/overlay/countdown",
+      name: "countdown",
+      component: () => import("../views/Scenes/CountdownScene.vue"),
+    },
   ],
 });
 

@@ -1,5 +1,14 @@
 @import "./base.css";
 
+@keyframes fadeIn {
+  0% {
+    opacity: 0;
+  }
+  100% {
+    opacity: 1;
+  }
+}
+
 .mono {
   font-family: monospace, monospace;
 }
@@ -12,4 +21,23 @@
 .horizontal-box {
   display: flex;
   flex-direction: row;
+}
+
+.absolute-center {
+  position: absolute;
+  left: 50%;
+  top: 50%;
+  transform: translate(-50%, -50%);
+}
+
+.absolute-center-horizontal {
+  position: absolute;
+  left: 50%;
+  transform: translateX(-50%);
+}
+
+.absolute-center-vertical {
+  position: absolute;
+  top: 50%;
+  transform: translateY(-50%);
 }
