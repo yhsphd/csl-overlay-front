@@ -41,6 +41,12 @@
   font-style: extrabold;
   font-weight: 800;
 }
+@font-face {
+  font-family: "Novecento Sans";
+  src: url("@/assets/fonts/Novecento/Novecento sans UltraBold.woff") format("woff");
+  font-style: ultrabold;
+  font-weight: 800;
+}
 
 * {
   font-family: "TheJamsil", "Noto Sans KR";

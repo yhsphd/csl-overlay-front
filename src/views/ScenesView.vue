@@ -6,5 +6,6 @@ import ConnectionInfo from "@/components/ConnectionInfo.vue";
   <main>
     <ConnectionInfo></ConnectionInfo>
     <router-link :to="{ name: 'countdown' }">Countdown</router-link>
+    <router-link :to="{ name: 'outro' }">Outro</router-link>
   </main>
 </template>

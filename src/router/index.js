@@ -24,6 +24,11 @@ const router = createRouter({
       name: "countdown",
       component: () => import("../views/Scenes/CountdownScene.vue"),
     },
+    {
+      path: "/overlay/outro",
+      name: "outro",
+      component: () => import("../views/Scenes/OutroScene.vue"),
+    },
   ],
 });
 
