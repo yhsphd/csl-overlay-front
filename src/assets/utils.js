@@ -95,13 +95,8 @@ export function deepMerge(target, source) {
 }
 
 export function toISOStringTimezoneOffset(dateVal) {
-  if (typeof dateVal === "string") {
-    dateVal = new Date(dateVal);
-  }
-
-  if (isNaN(dateVal)) {
-    return "";
-  }
+  if (typeof dateVal === "string") dateVal = new Date(dateVal);
+  if (isNaN(dateVal)) return "";
 
   let timezoneOffset = dateVal.getTimezoneOffset();
   let timezoneDateString = new Date(dateVal - timezoneOffset * 60000).toISOString().slice(0, -5);
@@ -111,4 +106,11 @@ export function toISOStringTimezoneOffset(dateVal) {
     (timezoneOffset == 0 ? "Z" : timezoneOffset > 0 ? "-" : "+") +
     secondsToMMSS(Math.abs(timezoneOffset))
   );
+}
+
+export function secondsLeft(dateVal) {
+  if (typeof dateVal === "string") dateVal = new Date(dateVal);
+  if (isNaN(dateVal)) return 0;
+
+  return (dateVal - new Date()) / 1000;
 }

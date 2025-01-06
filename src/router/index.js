@@ -29,6 +29,11 @@ const router = createRouter({
       name: "outro",
       component: () => import("../views/Scenes/OutroScene.vue"),
     },
+    {
+      path: "/overlay/intro",
+      name: "intro",
+      component: () => import("../views/Scenes/IntroScene.vue"),
+    },
   ],
 });
 

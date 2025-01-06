@@ -1,6 +1,6 @@
 <script setup>
 import { ref, computed, onMounted } from "vue";
-import { secondsToMMSS } from "@/assets/utils";
+import { secondsToMMSS, secondsLeft } from "@/assets/utils";
 import { useOverlayDataStore } from "@/stores/socket";
 
 import LogoComponent from "@/components/LogoComponent.vue";
@@ -8,14 +8,7 @@ import OverflowText from "@/components/OverflowText.vue";
 
 const state = useOverlayDataStore();
 
-const secondsLeft = ref(0);
-
-const timeLeftString = computed(() => {
-  if (secondsLeft.value < 0) {
-    return "00:00";
-  }
-  return secondsToMMSS(secondsLeft.value);
-});
+const timeLeftString = ref("");
 
 const np = computed(() => {
   if (!state.data.now_playing) {
@@ -71,7 +64,8 @@ const bracket = computed(() => {
 
 onMounted(() => {
   setInterval(() => {
-    secondsLeft.value = (new Date(state.data.schedule) - new Date()) / 1000;
+    const diff = secondsLeft(state.data?.schedule);
+    timeLeftString.value = diff >= 0 ? secondsToMMSS(diff) : "00:00";
   }, 1000);
 
   advancePageTimeout.value = setTimeout(advancePage, interval[0]);
@@ -124,6 +118,7 @@ onMounted(() => {
 .master-countdown-scene {
   position: absolute;
   color: white;
+  font-family: "theJamsil", "Noto Sans KR";
 }
 
 .logo {

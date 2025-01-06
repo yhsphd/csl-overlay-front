@@ -1,4 +1,4 @@
-@import url("https://fonts.googleapis.com/css2?family=Noto+Sans+KR:wght@100..900&display=swap");
+@import url("https://fonts.googleapis.com/css2?family=Noto+Sans+KR:wght@100..900&family=Poppins:ital,wght@0,100;0,200;0,300;0,400;0,500;0,600;0,700;0,800;0,900;1,100;1,200;1,300;1,400;1,500;1,600;1,700;1,800;1,900&display=swap");
 @font-face {
   font-family: "TheJamsil";
   src: url("https://fastly.jsdelivr.net/gh/projectnoonnu/noonfonts_2302_01@1.0/TheJamsil1Thin.woff2")
@@ -43,13 +43,16 @@
 }
 @font-face {
   font-family: "Novecento Sans";
-  src: url("@/assets/fonts/Novecento/Novecento sans UltraBold.woff") format("woff");
+  src: url("@/assets/fonts/Novecento/Novecento sans UltraBold.woff");
   font-style: ultrabold;
   font-weight: 800;
 }
 
-* {
-  font-family: "TheJamsil", "Noto Sans KR";
+:root {
+  --csl-red: #cd2e3a;
+  --csl-blue: #0047a0;
+  --csl-red-light: #d1564f;
+  --csl-blue-light: #6973b9;
 }
 
 *:has(.scene) {
@@ -65,4 +68,16 @@
 
   /* comment below out on production */
   background-image: url("img/testbg.png");
+}
+
+.novecento {
+  font-family: "Novecento Sans", "Noto Sans KR";
+}
+
+.theJamsil {
+  font-family: "theJamsil", "Noto Sans KR";
+}
+
+.poppins {
+  font-family: "Poppins", "Noto Sans KR";
 }

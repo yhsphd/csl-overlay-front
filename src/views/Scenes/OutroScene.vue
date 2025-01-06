@@ -51,6 +51,7 @@ onMounted(() => {
 .master-outro-scene {
   position: absolute;
   color: white;
+  font-family: "Novecento Sans";
 }
 
 .logo {
@@ -71,7 +72,6 @@ onMounted(() => {
 }
 
 .wrapper * {
-  font-family: "Novecento Sans";
   font-weight: 800;
   font-size: 200px;
   letter-spacing: 24px;
