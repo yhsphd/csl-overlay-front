@@ -42,17 +42,27 @@
   font-weight: 800;
 }
 @font-face {
-  font-family: "Novecento Sans";
-  src: url("@/assets/fonts/Novecento/Novecento sans UltraBold.woff");
+  font-family: "Novecento";
+  src: url("@/assets/fonts/Novecento/Novecento UltraBold.woff2");
   font-style: ultrabold;
   font-weight: 800;
+}
+@font-face {
+  font-family: "Novecento";
+  src: url("@/assets/fonts/Novecento/Novecento UltraBold.woff2");
+  font-style: demibold;
+  font-weight: 600;
 }
 
 :root {
   --csl-red: #cd2e3a;
-  --csl-blue: #0047a0;
+  --csl-red-rgb: 205, 46, 58;
   --csl-red-light: #d1564f;
+  --csl-red-light-rgb: 209, 86, 79;
+  --csl-blue: #0047a0;
+  --csl-blue-rgb: 0, 71, 160;
   --csl-blue-light: #6973b9;
+  --csl-blue-light-rgb: 105, 115, 185;
 }
 
 *:has(.scene) {
@@ -71,7 +81,7 @@
 }
 
 .novecento {
-  font-family: "Novecento Sans", "Noto Sans KR";
+  font-family: "Novecento", "Noto Sans KR";
 }
 
 .theJamsil {

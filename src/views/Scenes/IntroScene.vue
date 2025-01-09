@@ -61,7 +61,9 @@ onMounted(() => {
               <div class="theJamsil">대진표</div>
             </div>
             <div class="content">
-              <BracketsComponent></BracketsComponent>
+              <div class="bracketsContainer">
+                <BracketsComponent class="bracket"></BracketsComponent>
+              </div>
             </div>
           </div>
           <div class="page" v-if="false">
@@ -85,7 +87,7 @@ onMounted(() => {
 }
 
 .logo {
-  top: 92px;
+  top: 72px;
   width: 144px;
 }
 
@@ -127,7 +129,7 @@ onMounted(() => {
 
 .header {
   display: flex;
-  font-family: "Novecento Sans";
+  font-family: "Novecento";
   font-size: 44px;
   letter-spacing: 2px;
   font-weight: 700;
@@ -177,5 +179,12 @@ onMounted(() => {
 
 .sponsor {
   width: 590px;
+}
+
+.bracketsContainer {
+  position: relative;
+  top: 40px;
+  width: 100%;
+  overflow-x: scroll;
 }
 </style>

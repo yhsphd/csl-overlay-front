@@ -51,7 +51,7 @@ onMounted(() => {
 .master-outro-scene {
   position: absolute;
   color: white;
-  font-family: "Novecento Sans";
+  font-family: "Novecento";
 }
 
 .logo {
