@@ -2,11 +2,11 @@
 import { osuPfpUrl, pageSwitcher, secondsLeft, secondsToMMSS } from "@/assets/utils";
 import { onMounted, ref, computed } from "vue";
 
-import CslBox from "@/components/CslBox.vue";
 import LogoComponent from "@/components/LogoComponent.vue";
 import BracketsComponent from "@/components/BracketsComponent.vue";
 
 import { useOverlayDataStore } from "@/stores/socket";
+import IntroBox from "@/components/Intro/IntroBox.vue";
 
 const state = useOverlayDataStore();
 
@@ -39,7 +39,7 @@ onMounted(() => {
   <div class="master-intro-scene scene">
     <LogoComponent class="logo absolute-center-horizontal" type="white"></LogoComponent>
 
-    <CslBox class="container absolute-center-horizontal">
+    <IntroBox class="container absolute-center-horizontal">
       <div class="midBox">
         <div class="section">
           <div class="page">
@@ -97,7 +97,7 @@ onMounted(() => {
           ></Transition>
         </div>
       </div>
-    </CslBox>
+    </IntroBox>
   </div>
 </template>
 
@@ -115,8 +115,8 @@ onMounted(() => {
 .container {
   position: absolute;
   bottom: 60px;
-  width: 1760px;
-  height: 750px;
+  width: 1766px;
+  height: 755px;
 }
 
 .midBox {
@@ -129,7 +129,6 @@ onMounted(() => {
 
 .divider {
   width: 5px;
-  background: white;
   height: 100%;
   margin: 0 50px 0 50px;
 }
