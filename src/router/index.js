@@ -1,5 +1,10 @@
 import { createRouter, createWebHistory } from "vue-router";
 import HomeView from "../views/HomeView.vue";
+import ScenesView from "../views/ScenesView.vue";
+import CountdownScene from "../views/Scenes/CountdownScene.vue";
+import OutroScene from "../views/Scenes/OutroScene.vue";
+import IntroScene from "../views/Scenes/IntroScene.vue";
+import BracketsScene from "../views/Scenes/BracketsScene.vue";
 
 const router = createRouter({
   history: createWebHistory(import.meta.env.BASE_URL),
@@ -17,22 +22,27 @@ const router = createRouter({
     {
       path: "/overlay",
       name: "scenes",
-      component: () => import("../views/ScenesView.vue"),
+      component: ScenesView,
     },
     {
       path: "/overlay/countdown",
       name: "countdown",
-      component: () => import("../views/Scenes/CountdownScene.vue"),
+      component: CountdownScene,
     },
     {
       path: "/overlay/outro",
       name: "outro",
-      component: () => import("../views/Scenes/OutroScene.vue"),
+      component: OutroScene,
     },
     {
       path: "/overlay/intro",
       name: "intro",
-      component: () => import("../views/Scenes/IntroScene.vue"),
+      component: IntroScene,
+    },
+    {
+      path: "/overlay/brackets",
+      name: "brackets",
+      component: BracketsScene,
     },
   ],
 });

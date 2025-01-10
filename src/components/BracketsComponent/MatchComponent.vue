@@ -1,19 +1,24 @@
 <script setup>
 import { computed, ref, watch } from "vue";
 import OverflowText from "../OverflowText.vue";
-import { intObjectToArray, osuPfpUrl } from "@/assets/utils";
+import { intObjectToArray, osuPfpUrl, secondsToMMSS } from "@/assets/utils";
 
 const props = defineProps({
   next: Boolean,
   match: Object,
   teams: Object,
+  wide: Boolean,
 });
+
+const schedule = computed(() => new Date(props.match?.schedule));
 
 const players = computed(() => {
   return intObjectToArray(props.match?.players).map((x) => props.teams[x]);
 });
 
-const scores = computed(() => props.match?.result);
+const scores = computed(() =>
+  props.match?.result && Object.keys(props.match?.result).length ? props.match?.result : [0, 0]
+);
 const win = computed(() => {
   if (scores.value?.[0] === scores.value?.[1]) {
     return "";
@@ -23,9 +28,10 @@ const win = computed(() => {
     return "blue";
   }
 });
+const showScores = computed(() => !props.next && (scores.value[0] + scores.value[1] || props.wide));
 const nickRerenderTrigger = ref(0);
 
-const matchWidth = ref(280);
+const matchWidth = computed(() => (props.wide ? 410 : 280));
 
 watch(scores, () => {
   nickRerenderTrigger.value++;
@@ -49,9 +55,9 @@ watch(
     <div class="code horizontal-box novecento">
       <div>MATCH {{ match?.code[1] }}</div>
       <div v-if="matchWidth > 300" style="flex-grow: 1"></div>
-
-      <!--unpopulated-->
-      <div v-if="matchWidth > 300" style="margin-right: 32px">12:34</div>
+      <div v-if="matchWidth > 300 && !next">
+        {{ secondsToMMSS(schedule.getHours() * 60 + schedule.getMinutes()) }}
+      </div>
     </div>
     <div class="player red horizontal-box" :class="{ win: win === 'red' }">
       <img class="pfp" :src="osuPfpUrl(players[0]?.id)" />
@@ -59,9 +65,9 @@ watch(
         players[0]?.nick || "???"
       }}</OverflowText>
       <div
-        v-if="scores || next"
+        v-if="scores || next || wide"
         class="score"
-        :style="{ opacity: scores ? 1 : 0, width: scores ? 'unset' : 0 }"
+        :style="{ opacity: showScores ? 1 : 0, width: showScores ? 'unset' : 0 }"
       >
         {{ scores[0] }}
       </div>
@@ -72,9 +78,9 @@ watch(
         players[1]?.nick || "???"
       }}</OverflowText>
       <div
-        v-if="scores || next"
+        v-if="scores || next || wide"
         class="score"
-        :style="{ opacity: scores ? 1 : 0, width: scores ? 'unset' : 0 }"
+        :style="{ opacity: showScores ? 1 : 0, width: showScores ? 'unset' : 0 }"
       >
         {{ scores[1] }}
       </div>
