@@ -1,6 +1,6 @@
 <script setup>
 import { ref, computed, onMounted } from "vue";
-import { secondsToMMSS, secondsLeft } from "@/assets/utils";
+import { secondsToMMSS, secondsLeft, pageSwitcher } from "@/assets/utils";
 import { useOverlayDataStore } from "@/stores/socket";
 
 import LogoComponent from "@/components/LogoComponent.vue";
@@ -29,15 +29,7 @@ const duration = computed(() => np.value.length / 1000);
 const position = computed(() => np.value?.time / 1000);
 const positionFrac = computed(() => (position.value / duration.value) * 100);
 
-const interval = [10000, 50000];
-const activePages = ["nowPlaying", "nextMatch"];
-const currPage = ref(0);
-const advancePageTimeout = ref();
-const advancePage = () => {
-  currPage.value = (currPage.value + 1) % activePages.length;
-  clearTimeout(advancePageTimeout.value);
-  advancePageTimeout.value = setTimeout(advancePage, interval[currPage.value]);
-};
+const switcher = ref(new pageSwitcher(["nowPlaying", "nextMatch"], [10000, 50000]));
 
 const matches = computed(() => state.data?.CSL?.matches);
 const orderedCodes = computed(() =>
@@ -68,7 +60,7 @@ onMounted(() => {
     timeLeftString.value = diff >= 0 ? secondsToMMSS(diff) : "00:00";
   }, 1000);
 
-  advancePageTimeout.value = setTimeout(advancePage, interval[0]);
+  switcher.value.init();
 });
 </script>
 
@@ -77,12 +69,12 @@ onMounted(() => {
     <LogoComponent class="logo absolute-center-horizontal" type="white"></LogoComponent>
     <div class="header absolute-center">Time to Event</div>
     <div class="timeLeft absolute-center">{{ timeLeftString }}</div>
-    <div class="middleArea absolute-center" @click="advancePage()">
+    <div class="middleArea absolute-center" @click="switcher.advancePage()">
       <Transition name="switchPage" mode="out-in">
         <div
-          v-if="activePages[currPage] === 'nowPlaying'"
+          v-if="switcher.currPage === 'nowPlaying'"
           class="nowPlaying horizontal-box"
-          :key="currPage"
+          :key="switcher.currPage"
         >
           <div class="label">Now Playing</div>
           <div class="value">
@@ -96,9 +88,9 @@ onMounted(() => {
       ></Transition>
       <Transition name="switchPage" mode="out-in">
         <div
-          v-if="activePages[currPage] === 'nextMatch'"
+          v-if="switcher.currPage === 'nextMatch'"
           class="nextMatch horizontal-box"
-          :key="currPage"
+          :key="switcher.currPage"
         >
           <div class="label">Next Match</div>
           <div class="value">
@@ -199,14 +191,5 @@ onMounted(() => {
   position: absolute;
   width: 400px;
   bottom: 70px;
-}
-
-.switchPage-enter-active {
-  opacity: 0;
-  animation: 500ms fadeIn 500ms;
-}
-
-.switchPage-leave-active {
-  animation: fadeIn 500ms reverse;
 }
 </style>

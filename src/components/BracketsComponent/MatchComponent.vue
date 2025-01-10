@@ -1,10 +1,28 @@
 <script setup>
-import { ref, watch } from "vue";
+import { computed, ref, watch } from "vue";
 import OverflowText from "../OverflowText.vue";
+import { intObjectToArray, osuPfpUrl } from "@/assets/utils";
 
-const next = ref(false);
-const scores = ref(false);
-const win = ref("");
+const props = defineProps({
+  next: Boolean,
+  match: Object,
+  teams: Object,
+});
+
+const players = computed(() => {
+  return intObjectToArray(props.match?.players).map((x) => props.teams[x]);
+});
+
+const scores = computed(() => props.match?.result);
+const win = computed(() => {
+  if (scores.value?.[0] === scores.value?.[1]) {
+    return "";
+  } else if (scores.value?.[0] > scores.value?.[1]) {
+    return "red";
+  } else {
+    return "blue";
+  }
+});
 const nickRerenderTrigger = ref(0);
 
 const matchWidth = ref(280);
@@ -12,41 +30,56 @@ const matchWidth = ref(280);
 watch(scores, () => {
   nickRerenderTrigger.value++;
 });
-watch(next, () => {
-  nickRerenderTrigger.value++;
-});
+watch(
+  () => props.teams, // to watch props
+  () => {
+    nickRerenderTrigger.value++;
+  }
+);
+watch(
+  () => props.next,
+  () => {
+    nickRerenderTrigger.value++;
+  }
+);
 </script>
 
 <template>
   <div class="master-match" :style="{ width: matchWidth + 'px' }">
     <div class="code horizontal-box novecento">
-      <div>MATCH 2</div>
+      <div>MATCH {{ match?.code[1] }}</div>
       <div v-if="matchWidth > 300" style="flex-grow: 1"></div>
+
+      <!--unpopulated-->
       <div v-if="matchWidth > 300" style="margin-right: 32px">12:34</div>
     </div>
     <div class="player red horizontal-box" :class="{ win: win === 'red' }">
-      <img class="pfp" src="https://a.ppy.sh/6665667" />
-      <OverflowText class="nick" :key="nickRerenderTrigger">worst hr player</OverflowText>
+      <img class="pfp" :src="osuPfpUrl(players[0]?.id)" />
+      <OverflowText class="nick" :key="nickRerenderTrigger">{{
+        players[0]?.nick || "???"
+      }}</OverflowText>
       <div
-        v-if="score || next"
+        v-if="scores || next"
         class="score"
         :style="{ opacity: scores ? 1 : 0, width: scores ? 'unset' : 0 }"
       >
-        6
+        {{ scores[0] }}
       </div>
     </div>
     <div class="player blue horizontal-box" :class="{ win: win === 'blue' }">
-      <img class="pfp" src="https://a.ppy.sh/6665667" />
-      <OverflowText class="nick" :key="nickRerenderTrigger">fragranceofpage123</OverflowText>
+      <img class="pfp" :src="osuPfpUrl(players[1]?.id)" />
+      <OverflowText class="nick" :key="nickRerenderTrigger">{{
+        players[1]?.nick || "???"
+      }}</OverflowText>
       <div
-        v-if="score || next"
+        v-if="scores || next"
         class="score"
         :style="{ opacity: scores ? 1 : 0, width: scores ? 'unset' : 0 }"
       >
-        6
+        {{ scores[1] }}
       </div>
     </div>
-    <div v-show="next" class="nextHint">
+    <div v-show="next && !(scores[0] + scores[1])" class="nextHint">
       <div class="upNext">>>> UP NEXT</div>
     </div>
   </div>

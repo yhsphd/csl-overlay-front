@@ -1,5 +1,13 @@
 <script setup>
+import { useOverlayDataStore } from "@/stores/socket";
 import MatchComponent from "./BracketsComponent/MatchComponent.vue";
+import { computed } from "vue";
+
+const state = useOverlayDataStore();
+
+const matches = computed(() => state.data?.CSL?.matches);
+const teams = computed(() => state.data?.CSL?.teams);
+const code = computed(() => state.data?.match_code);
 </script>
 
 <template>
@@ -8,11 +16,19 @@ import MatchComponent from "./BracketsComponent/MatchComponent.vue";
       <tbody>
         <tr>
           <td>
-            <MatchComponent></MatchComponent>
+            <MatchComponent
+              :match="matches?.M1"
+              :teams="teams"
+              :next="code === 'M1'"
+            ></MatchComponent>
           </td>
           <td class="connector"><hr /></td>
           <td>
-            <MatchComponent></MatchComponent>
+            <MatchComponent
+              :match="matches?.M3"
+              :teams="teams"
+              :next="code === 'M3'"
+            ></MatchComponent>
           </td>
           <td class="binder" rowspan="2">
             <hr />
@@ -22,16 +38,28 @@ import MatchComponent from "./BracketsComponent/MatchComponent.vue";
             <div style="width: 80px"></div>
           </td>
           <td rowspan="2">
-            <MatchComponent></MatchComponent>
+            <MatchComponent
+              :match="matches?.M5"
+              :teams="teams"
+              :next="code === 'M5'"
+            ></MatchComponent>
           </td>
         </tr>
         <tr>
           <td>
-            <MatchComponent></MatchComponent>
+            <MatchComponent
+              :match="matches?.M2"
+              :teams="teams"
+              :next="code === 'M2'"
+            ></MatchComponent>
           </td>
           <td class="connector"><hr /></td>
           <td>
-            <MatchComponent></MatchComponent>
+            <MatchComponent
+              :match="matches?.M4"
+              :teams="teams"
+              :next="code === 'M4'"
+            ></MatchComponent>
           </td>
         </tr>
       </tbody>

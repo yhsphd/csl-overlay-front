@@ -1,3 +1,5 @@
+import { computed, ref } from "vue";
+
 // "undefined" means the URL will be computed from the `window.location` object
 export const rootUrl = import.meta.env.PROD ? "" : "http://localhost:3000";
 
@@ -113,4 +115,49 @@ export function secondsLeft(dateVal) {
   if (isNaN(dateVal)) return 0;
 
   return (dateVal - new Date()) / 1000;
+}
+
+export function osuPfpUrl(uid) {
+  if (!uid) {
+    return "/nopfp.png";
+  }
+  return "https://a.ppy.sh/" + uid;
+}
+
+export function intObjectToArray(obj) {
+  if (!obj || Object.keys(obj).length === 0) {
+    return [];
+  }
+
+  const elems = Math.max(...Object.keys(obj).map((x) => parseInt(x)));
+  const res = new Array(elems + 1);
+
+  for (let key in Object.keys(obj)) {
+    res[key] = obj[key];
+  }
+
+  return res;
+}
+
+export class pageSwitcher {
+  constructor(activePages, intervals) {
+    this.intervals = ref(intervals);
+    this.activePages = ref(activePages);
+    this.currPageInd = ref(0);
+    this.currPage = computed(() => this.activePages.value[this.currPageInd.value]);
+    this.advancePageTimeout = ref();
+  }
+
+  init() {
+    this.advancePageTimeout = setTimeout(() => this.advancePage(), this.intervals[0]);
+  }
+
+  advancePage() {
+    this.currPageInd = (this.currPageInd + 1) % this.activePages.length;
+    clearTimeout(this.advancePageTimeout);
+    this.advancePageTimeout = setTimeout(
+      () => this.advancePage(),
+      this.intervals[this.currPageInd]
+    );
+  }
 }

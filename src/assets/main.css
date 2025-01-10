@@ -41,3 +41,12 @@
   top: 50%;
   transform: translateY(-50%);
 }
+
+.switchPage-enter-active {
+  opacity: 0;
+  animation: 500ms fadeIn 500ms;
+}
+
+.switchPage-leave-active {
+  animation: fadeIn 500ms reverse;
+}

@@ -2,12 +2,12 @@
 import { onMounted, ref } from "vue";
 
 const masterRef = ref();
-const width = ref();
-const height = ref();
+const width = ref(0);
+const height = ref(0);
 
 onMounted(() => {
-  width.value = masterRef.value.clientWidth;
-  height.value = masterRef.value.clientHeight;
+  width.value = masterRef.value.clientWidth ? masterRef.value.clientWidth : 0;
+  height.value = masterRef.value.clientHeight ? masterRef.value.clientHeight : 0;
 });
 </script>
 
@@ -24,8 +24,8 @@ onMounted(() => {
         <rect
           x="2.5"
           y="2.5"
-          :width="width - 5"
-          :height="height - 5"
+          :width="width >= 5 ? width - 5 : 0"
+          :height="height >= 5 ? height - 5 : 0"
           rx="47.5"
           stroke="url(#paint0_linear_429_98)"
           stroke-width="5"
