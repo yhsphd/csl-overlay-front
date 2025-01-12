@@ -1,6 +1,6 @@
 <script setup>
 import BracketsComponent from "@/components/BracketsComponent.vue";
-import CslBox from "@/components/CslBox.vue";
+import CslBox from "@/components/Boxes/CslBox.vue";
 import LogoComponent from "@/components/LogoComponent.vue";
 </script>
 

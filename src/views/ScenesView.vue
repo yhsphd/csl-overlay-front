@@ -9,5 +9,6 @@ import ConnectionInfo from "@/components/ConnectionInfo.vue";
     <router-link :to="{ name: 'outro' }">Outro</router-link>
     <router-link :to="{ name: 'intro' }">Intro</router-link>
     <router-link :to="{ name: 'brackets' }">Brackets & Schedules</router-link>
+    <router-link :to="{ name: 'analysis' }">Player Analysis</router-link>
   </main>
 </template>

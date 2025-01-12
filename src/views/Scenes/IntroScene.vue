@@ -6,7 +6,7 @@ import LogoComponent from "@/components/LogoComponent.vue";
 import BracketsComponent from "@/components/BracketsComponent.vue";
 
 import { useOverlayDataStore } from "@/stores/socket";
-import IntroBox from "@/components/Intro/IntroBox.vue";
+import IntroBox from "@/components/Boxes/IntroBox.vue";
 
 const state = useOverlayDataStore();
 

@@ -5,6 +5,7 @@ import CountdownScene from "../views/Scenes/CountdownScene.vue";
 import OutroScene from "../views/Scenes/OutroScene.vue";
 import IntroScene from "../views/Scenes/IntroScene.vue";
 import BracketsScene from "../views/Scenes/BracketsScene.vue";
+import AnalysisScene from "@/views/Scenes/AnalysisScene.vue";
 
 const router = createRouter({
   history: createWebHistory(import.meta.env.BASE_URL),
@@ -43,6 +44,11 @@ const router = createRouter({
       path: "/overlay/brackets",
       name: "brackets",
       component: BracketsScene,
+    },
+    {
+      path: "/overlay/analysis",
+      name: "analysis",
+      component: AnalysisScene,
     },
   ],
 });

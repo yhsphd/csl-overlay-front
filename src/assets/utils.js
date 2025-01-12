@@ -161,3 +161,10 @@ export class pageSwitcher {
     );
   }
 }
+
+export const colors = {
+  cslRed: "#cd2e3a",
+  cslRedLight: "#d1564f",
+  cslBlue: "#0047a0",
+  cslBlueLight: "#6973b9",
+};
