@@ -1,5 +1,4 @@
 <script setup>
-import "@/components/Camera/camera.css";
 import { pageSwitcher, secondsLeft, secondsToMMSS } from "@/assets/utils";
 import LogoComponent from "@/components/LogoComponent.vue";
 
@@ -70,6 +69,8 @@ onMounted(() => {
 </template>
 
 <style scoped>
+@import url(@/components/Camera/camera.css);
+
 .master-bottom-bar {
   width: 1700px;
   height: 100px;

@@ -1,5 +1,4 @@
 <script setup>
-import "@/components/Camera/camera.css";
 import { onMounted, ref } from "vue";
 
 const props = defineProps({
@@ -45,6 +44,8 @@ onMounted(() => {
 </template>
 
 <style scoped>
+@import url(@/components/Camera/camera.css);
+
 .master-person-card {
   opacity: 0;
   height: 100px;
