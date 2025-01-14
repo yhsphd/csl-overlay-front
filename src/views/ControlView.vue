@@ -5,6 +5,7 @@ import OverlayDataPreview from "@/components/ControlView/OverlayDataPreview.vue"
 import TimerSetControl from "@/components/ControlView/TimerSetControl.vue";
 import PersonCardControl from "@/components/ControlView/PersonCardControl.vue";
 import ConnectionInfo from "@/components/ConnectionInfo.vue";
+import TitleSetControl from "@/components/ControlView/TitleSetControl.vue";
 
 const state = useOverlayDataStore();
 
@@ -29,6 +30,11 @@ function reconnect() {
       <input v-model="stagedRootUrl" @keyup.enter="reconnect()" />
       <button @click="reconnect()">Reconnect</button>
     </div>
+
+    <div class="control-divider"></div>
+
+    <h3>Set Title</h3>
+    <TitleSetControl></TitleSetControl>
 
     <div class="control-divider"></div>
 

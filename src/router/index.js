@@ -6,6 +6,7 @@ import OutroScene from "../views/Scenes/OutroScene.vue";
 import IntroScene from "../views/Scenes/IntroScene.vue";
 import BracketsScene from "../views/Scenes/BracketsScene.vue";
 import AnalysisScene from "@/views/Scenes/AnalysisScene.vue";
+import CameraScene from "@/views/Scenes/CameraScene.vue";
 
 const router = createRouter({
   history: createWebHistory(import.meta.env.BASE_URL),
@@ -49,6 +50,11 @@ const router = createRouter({
       path: "/overlay/analysis",
       name: "analysis",
       component: AnalysisScene,
+    },
+    {
+      path: "/overlay/camera",
+      name: "camera",
+      component: CameraScene,
     },
   ],
 });

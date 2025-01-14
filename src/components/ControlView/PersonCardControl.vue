@@ -20,7 +20,7 @@ function reset() {
 }
 
 function sendTrigger() {
-  state.sendControlEvent("showPeopleCards", {
+  state.sendControlEvent("showPersonCards", {
     duration: duration.value,
     people: selected.value.slice(0, count.value).map((x) => people.value[x]),
   });

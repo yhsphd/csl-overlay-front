@@ -45,5 +45,14 @@ export const useOverlayDataStore = defineStore("overlayData", () => {
     socket.disconnect().connect();
   }
 
-  return { connected, data, bindEvents, sendEvent, sendControlEvent, connect, getURI, reconnectTo };
+  return {
+    connected,
+    data,
+    bindEvents,
+    sendEvent,
+    sendControlEvent,
+    connect,
+    getURI,
+    reconnectTo,
+  };
 });
