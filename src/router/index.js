@@ -7,6 +7,7 @@ import IntroScene from "../views/Scenes/IntroScene.vue";
 import BracketsScene from "../views/Scenes/BracketsScene.vue";
 import AnalysisScene from "@/views/Scenes/AnalysisScene.vue";
 import CameraScene from "@/views/Scenes/CameraScene.vue";
+import BanpickScene from "@/views/Scenes/BanpickScene.vue";
 
 const router = createRouter({
   history: createWebHistory(import.meta.env.BASE_URL),
@@ -55,6 +56,11 @@ const router = createRouter({
       path: "/overlay/camera",
       name: "camera",
       component: CameraScene,
+    },
+    {
+      path: "/overlay/banpick",
+      name: "banpick",
+      component: BanpickScene,
     },
   ],
 });
