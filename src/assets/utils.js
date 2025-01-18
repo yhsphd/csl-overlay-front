@@ -168,3 +168,14 @@ export const colors = {
   cslBlue: "#0047a0",
   cslBlueLight: "#6973b9",
 };
+
+export const range = (start, stop, step = 1) =>
+  Array(Math.ceil((stop - start) / step))
+    .fill(start)
+    .map((x, y) => x + y * step);
+
+export const flipColor = (col) => {
+  if (col === "red") return "blue";
+  else if (col === "blue") return "red";
+  return "";
+};

@@ -1,9 +1,13 @@
 <script setup>
 import { computed } from "vue";
+import OverflowText from "./OverflowText.vue";
+import { useOrderStore } from "@/stores/order";
 
 const props = defineProps({
   type: String,
 });
+
+const ov = useOrderStore();
 
 const masterHeight = computed(() => {
   switch (props.type) {
@@ -13,18 +17,30 @@ const masterHeight = computed(() => {
       return "109px";
   }
 });
+
+const mapToShow = computed(() => ov.lastPickedMap);
 </script>
 
 <template>
   <div class="master-map-box">
-    <div class="mapBox" :style="{ height: masterHeight }">
+    <div
+      class="mapBox"
+      :style="{ height: masterHeight, backgroundImage: `url(${mapToShow?.background})` }"
+    >
       <div class="contentWrapper">
-        <div class="code novecento">NM1</div>
-        <div class="title poppins">1.Kla$ feat. Czar, Schokk - Russian Kings</div>
-        <div class="diff poppins">[lip gloss & makeup]</div>
+        <div class="code novecento">{{ mapToShow?.code }}</div>
+        <OverflowText class="title poppins" :key="mapToShow?.title">
+          {{ mapToShow?.artist }} - {{ mapToShow?.title }}
+        </OverflowText>
+        <div class="diff poppins">[{{ mapToShow?.difficulty }}]</div>
         <div v-if="type === 'result'" class="scoreDiffGraph"></div>
       </div>
-      <div class="backgroundTint"></div>
+      <div
+        class="backgroundTint"
+        :style="{
+          backgroundColor: ov.tb ? 'black' : `var(--csl-${ov.lastPick?.team ? 'blue' : 'red'})`,
+        }"
+      ></div>
     </div>
   </div>
 </template>
@@ -53,7 +69,6 @@ const masterHeight = computed(() => {
   left: 0;
   width: 100%;
   height: 100%;
-  background-color: var(--csl-blue);
   opacity: 0.8;
 }
 
@@ -74,6 +89,9 @@ const masterHeight = computed(() => {
 .title {
   font-size: 20px;
   font-weight: 500;
+  white-space: nowrap;
+  width: 100%;
+  height: 32px;
 }
 
 .diff {

@@ -9,6 +9,19 @@
   }
 }
 
+@keyframes upNextPulse {
+  0% {
+    opacity: 0.3;
+  }
+  45%,
+  55% {
+    opacity: 1;
+  }
+  100% {
+    opacity: 0.3;
+  }
+}
+
 .mono {
   font-family: monospace, monospace;
 }

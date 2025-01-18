@@ -1,4 +1,19 @@
-<script setup></script>
+<script setup>
+import { onMounted, ref } from "vue";
+import { useOrderStore } from "@/stores/order";
+
+const ov = useOrderStore();
+
+const ongoingText = ref("");
+
+const updateOngoingText = () => {
+  ongoingText.value = ".".repeat(ongoingText.value.length % 3) + ".";
+};
+
+onMounted(() => {
+  setInterval(updateOngoingText, 500);
+});
+</script>
 
 <template>
   <div class="master-banpick-bar">
@@ -18,15 +33,31 @@
     <div class="contentBar horizontal-box">
       <div style="width: 168px"></div>
       <div class="playerBox red">
-        <div class="nick novecento">worst hr player</div>
-        <div class="state poppins">Defending</div>
+        <div class="nick novecento">{{ ov.teams?.[0]?.name }}</div>
+        <div
+          class="state poppins"
+          :style="{ opacity: ov.turn === 'red' && (ov.defending || !ov.playing) ? 1 : 0 }"
+        >
+          {{ ov.defending ? "Defending" : "" }}
+          {{ !ov.defending && !ov.finished ? "Picking" : "" }}
+          {{ ov.finished ? (ov.win === "red" ? "Victory" : "Defeat") : "" }}
+          {{ !ov.finished ? ongoingText : "" }}
+        </div>
       </div>
       <div class="scores theJamsil">
-        <div class="absolute-center">3 : 2</div>
+        <div class="absolute-center">{{ ov.setScores?.[0] }} : {{ ov.setScores?.[1] }}</div>
       </div>
       <div class="playerBox blue">
-        <div class="nick novecento">worst hr player</div>
-        <div class="state poppins">Defending</div>
+        <div class="nick novecento">{{ ov.teams?.[1]?.name }}</div>
+        <div
+          class="state poppins"
+          :style="{ opacity: ov.turn === 'blue' && (ov.defending || !ov.playing) ? 1 : 0 }"
+        >
+          {{ ov.defending ? "Defending" : "" }}
+          {{ !ov.defending && !ov.finished ? "Picking" : "" }}
+          {{ ov.finished ? (ov.win === "blue" ? "Victory" : "Defeat") : "" }}
+          {{ !ov.finished ? ongoingText : "" }}
+        </div>
       </div>
       <div style="width: 168px"></div>
     </div>
@@ -41,6 +72,7 @@
   color: white;
   z-index: 10;
   background-color: rgba(0, 0, 0, 0.25);
+  border-radius: 16px;
 }
 
 .box {
@@ -80,6 +112,8 @@
   font-size: 28px;
   line-height: 40px;
   font-weight: 600;
+  text-align: center;
+  transition: opacity 1s ease;
 }
 
 .red .state {

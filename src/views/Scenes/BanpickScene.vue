@@ -5,6 +5,23 @@ import CslBox from "@/components/Boxes/CslBox.vue";
 import LogoComponent from "@/components/LogoComponent.vue";
 import OverflowText from "@/components/OverflowText.vue";
 import MapBox from "@/components/MapBox.vue";
+
+import { useOverlayDataStore } from "@/stores/socket";
+import { computed } from "vue";
+import { intObjectToArray, secondsToMMSS } from "@/assets/utils";
+import { useOrderStore } from "@/stores/order";
+
+const state = useOverlayDataStore();
+const ov = useOrderStore();
+
+const mappool = computed(() => intObjectToArray(state.data?.mappool));
+const mapToShow = computed(() => ov.lastPickedMap);
+const statsToShow = computed(() =>
+  mapToShow.value.stats?.modified ? mapToShow.value.stats.modified : mapToShow.value.stats
+);
+const showPrevResult = computed(
+  () => !(ov.playing || ov.defending || ov.order.length === 4 || ov.tb)
+);
 </script>
 
 <template>
@@ -15,127 +32,150 @@ import MapBox from "@/components/MapBox.vue";
     <CslBox class="mappoolBox" :thin="true">
       <div class="header">Mappool</div>
       <div class="content">
-        <div class="mapBox horizontal-box" v-for="_ in 19" :key="_">
-          <div class="code novecento">NM1</div>
+        <div
+          class="mapBox horizontal-box"
+          v-for="(map, i) in mappool"
+          :key="i"
+          :style="{
+            opacity: ov.unavailableMaps.banned.includes(map.code) ? 0.3 : 1,
+            color: ov.unavailableMaps.red.includes(map.code)
+              ? 'var(--csl-red-light)'
+              : ov.unavailableMaps.blue.includes(map.code)
+                ? 'var(--csl-blue-light)'
+                : 'white',
+          }"
+          :class="{ pulsing: ov.unavailableMaps.highlight === map.code }"
+        >
+          <div class="code novecento">{{ map.code }}</div>
           <OverflowText class="title poppins">
-            Kawada Mami - Going back to square one [Throw of the Dice]
+            {{ map.artist }} - {{ map.title }} [{{ map.difficulty }}]
           </OverflowText>
         </div>
       </div>
     </CslBox>
     <BanpickBox class="banpickBox absolute-center-horizontal"></BanpickBox>
     <CslBox class="pickBox" :thin="true">
-      <div v-if="false" style="position: absolute">
-        <div class="header">Current Pick</div>
-        <div class="content">
-          <MapBox></MapBox>
-          <div class="bmapStats">
-            <div class="header">Beatmap Information</div>
-            <div class="horizontal-box">
-              <div class="statColumn">
-                <div class="statLine horizontal-box">
-                  <div>Drain</div>
-                  <div style="flex-grow: 1"></div>
-                  <div>04:22</div>
+      <Transition name="switchPage" mode="out-in">
+        <div v-if="!showPrevResult" style="position: absolute">
+          <div class="header">Current Pick</div>
+          <div class="content">
+            <MapBox></MapBox>
+            <div class="bmapStats">
+              <div class="header">Beatmap Information</div>
+              <div class="horizontal-box">
+                <div class="statColumn">
+                  <div class="statLine horizontal-box">
+                    <div>Drain</div>
+                    <div style="flex-grow: 1"></div>
+                    <div>{{ secondsToMMSS(statsToShow?.length / 1000) }}</div>
+                  </div>
+                  <div class="statLine horizontal-box">
+                    <div>BPM</div>
+                    <div style="flex-grow: 1"></div>
+                    <div>{{ statsToShow?.bpm.toFixed(0) }}</div>
+                  </div>
+                  <div class="statLine horizontal-box">
+                    <div>Circles</div>
+                    <div style="flex-grow: 1"></div>
+                    <div>{{ mapToShow?.count_circles }}</div>
+                  </div>
+                  <div class="statLine horizontal-box">
+                    <div>Sliders</div>
+                    <div style="flex-grow: 1"></div>
+                    <div>{{ mapToShow?.count_sliders }}</div>
+                  </div>
+
+                  <div class="statLine horizontal-box">
+                    <div>Spinners</div>
+                    <div style="flex-grow: 1"></div>
+                    <div>{{ mapToShow?.count_spinners }}</div>
+                  </div>
                 </div>
-                <div class="statLine horizontal-box">
-                  <div>BPM</div>
-                  <div style="flex-grow: 1"></div>
-                  <div>04:22</div>
-                </div>
-                <div class="statLine horizontal-box">
-                  <div>Notes</div>
-                  <div style="flex-grow: 1"></div>
-                  <div>04:22</div>
-                </div>
-                <div class="statLine horizontal-box">
-                  <div>Sliders</div>
-                  <div style="flex-grow: 1"></div>
-                  <div>04:22</div>
-                </div>
-              </div>
-              <div class="statColumn">
-                <div class="statLine horizontal-box">
-                  <div>SR</div>
-                  <div style="flex-grow: 1"></div>
-                  <div>04:22</div>
-                </div>
-                <div class="statLine horizontal-box">
-                  <div>AR</div>
-                  <div style="flex-grow: 1"></div>
-                  <div>04:22</div>
-                </div>
-                <div class="statLine horizontal-box">
-                  <div>CS</div>
-                  <div style="flex-grow: 1"></div>
-                  <div>04:22</div>
-                </div>
-                <div class="statLine horizontal-box">
-                  <div>HP</div>
-                  <div style="flex-grow: 1"></div>
-                  <div>04:22</div>
-                </div>
-                <div class="statLine horizontal-box">
-                  <div>OD</div>
-                  <div style="flex-grow: 1"></div>
-                  <div>04:22</div>
+                <div class="statColumn">
+                  <div class="statLine horizontal-box">
+                    <div>SR</div>
+                    <div style="flex-grow: 1"></div>
+                    <div>{{ statsToShow?.sr.toFixed(2) }}</div>
+                  </div>
+                  <div class="statLine horizontal-box">
+                    <div>AR</div>
+                    <div style="flex-grow: 1"></div>
+                    <div>{{ statsToShow?.ar.toFixed(1) }}</div>
+                  </div>
+                  <div class="statLine horizontal-box">
+                    <div>CS</div>
+                    <div style="flex-grow: 1"></div>
+                    <div>{{ statsToShow?.cs.toFixed(1) }}</div>
+                  </div>
+                  <div class="statLine horizontal-box">
+                    <div>HP</div>
+                    <div style="flex-grow: 1"></div>
+                    <div>{{ statsToShow?.hp.toFixed(1) }}</div>
+                  </div>
+                  <div class="statLine horizontal-box">
+                    <div>OD</div>
+                    <div style="flex-grow: 1"></div>
+                    <div>{{ statsToShow?.od.toFixed(1) }}</div>
+                  </div>
                 </div>
               </div>
             </div>
           </div>
         </div>
-      </div>
-      <div v-if="true" style="position: absolute">
-        <div class="header">Previous Pick Result</div>
-        <div class="content">
-          <MapBox type="result"></MapBox>
-          <div class="scoreBar horizontal-box novecento">
-            <div class="label red">P1</div>
-            <div class="score red">0460020</div>
-            <div class="comparer">></div>
-            <div class="score blue">0460020</div>
-            <div class="label blue">P2</div>
-          </div>
-          <div class="detailedResults novecento">
-            <div class="statLine horizontal-box">
-              <div class="statLabel">Acc</div>
-              <div class="stat">98.19%</div>
+      </Transition>
+      <Transition name="switchPage" mode="out-in">
+        <div v-if="showPrevResult" style="position: absolute">
+          <div class="header">Previous Pick Result</div>
+          <div class="content">
+            <MapBox type="result"></MapBox>
+            <div class="scoreBar horizontal-box novecento">
+              <div class="label red">P1</div>
+              <div class="score red">0460020</div>
               <div class="comparer">></div>
-              <div class="stat">98.19%</div>
-              <div class="statLabel"></div>
+              <div class="score blue">0460020</div>
+              <div class="label blue">P2</div>
             </div>
-            <div class="statLine horizontal-box">
-              <div class="statLabel">Combo</div>
-              <div class="stat">1284</div>
-              <div class="comparer">></div>
-              <div class="stat">1284</div>
-              <div class="statLabel"></div>
-            </div>
-            <div class="statLine horizontal-box">
-              <div class="statLabel">Miss</div>
-              <div class="stat">2</div>
-              <div class="comparer">></div>
-              <div class="stat">26</div>
-              <div class="statLabel"></div>
-            </div>
-            <div
-              style="
-                position: absolute;
-                top: 0;
-                right: 0;
-                writing-mode: vertical-lr;
-                transform: rotateZ(180deg);
-                background-color: #515151;
-                height: 100%;
-                font-size: 18px;
-                text-align: center;
-              "
-            >
-              STATS
+            <div class="detailedResults novecento">
+              <div class="statLine horizontal-box">
+                <div class="statLabel">Acc</div>
+                <div class="stat">98.19%</div>
+                <div class="comparer">></div>
+                <div class="stat">98.19%</div>
+                <div class="statLabel"></div>
+              </div>
+              <div class="statLine horizontal-box">
+                <div class="statLabel">Combo</div>
+                <div class="stat">1284</div>
+                <div class="comparer">></div>
+                <div class="stat">1284</div>
+                <div class="statLabel"></div>
+              </div>
+              <div class="statLine horizontal-box">
+                <div class="statLabel">Miss</div>
+                <div class="stat">2</div>
+                <div class="comparer">></div>
+                <div class="stat">26</div>
+                <div class="statLabel"></div>
+              </div>
+              <div
+                style="
+                  position: absolute;
+                  top: 0;
+                  right: 0;
+                  writing-mode: vertical-lr;
+                  transform: rotateZ(180deg);
+                  background-color: #515151;
+                  height: 100%;
+                  font-size: 18px;
+                  text-align: center;
+                "
+              >
+                STATS
+              </div>
             </div>
           </div>
         </div>
-      </div>
+      </Transition>
     </CslBox>
     <CslBox class="commBox" :thin="true"></CslBox>
   </div>
@@ -304,5 +344,9 @@ import MapBox from "@/components/MapBox.vue";
 .detailedResults .comparer {
   width: 30px;
   text-align: center;
+}
+
+.pulsing {
+  animation: upNextPulse 700ms ease infinite;
 }
 </style>

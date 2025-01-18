@@ -175,16 +175,4 @@ watch(
   writing-mode: vertical-lr;
   transform: rotateZ(180deg);
 }
-
-@keyframes upNextPulse {
-  0% {
-    opacity: 0.3;
-  }
-  50% {
-    opacity: 1;
-  }
-  100% {
-    opacity: 0.3;
-  }
-}
 </style>
