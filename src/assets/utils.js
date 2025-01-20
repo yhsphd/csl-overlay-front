@@ -179,3 +179,14 @@ export const flipColor = (col) => {
   else if (col === "blue") return "red";
   return "";
 };
+
+export const numToTeamCol = (num) => {
+  switch (num) {
+    case 0:
+      return "red";
+    case 1:
+      return "blue";
+    default:
+      return "";
+  }
+};

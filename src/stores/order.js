@@ -1,13 +1,13 @@
 import { computed } from "vue";
 import { defineStore } from "pinia";
-import { intObjectToArray } from "@/assets/utils";
+import { intObjectToArray, numToTeamCol } from "@/assets/utils";
 import { useOverlayDataStore } from "./socket";
 
 export const useOrderStore = defineStore("order", () => {
   const state = useOverlayDataStore();
 
-  const firstBan = computed(() => (state.data?.progress?.first_ban ? "blue" : "red"));
-  const firstPick = computed(() => (state.data?.progress?.first_pick ? "blue" : "red"));
+  const firstBan = computed(() => numToTeamCol(state.data?.progress?.first_ban));
+  const firstPick = computed(() => numToTeamCol(state.data?.progress?.first_pick));
 
   const teams = computed(() => state.data?.teams);
 
@@ -25,14 +25,16 @@ export const useOrderStore = defineStore("order", () => {
       // Ban phase
       // if firstBan is 1(Blue), count 0 - Blue / 1 - Red  / 2 - Red  / 3 - Red
       // if firstBan is 2(Red),  count 1 - Red  / 2 - Blue / 3 - Blue / 4 - Red
-      return (firstBan.value ? count === 0 || count === 3 : count === 1 || count === 2)
+      return (firstBan.value === "blue" ? count === 0 || count === 3 : count === 1 || count === 2)
         ? "blue"
         : "red";
     } else {
       // Pick phase
       // if firstPick is 1(Blue), count-4 even - Blue / odd - Red
       // if firstPick is 0(Red),  count-4 even - Red  / odd - Blue
-      return (firstPick.value ? (count - 4) % 2 === 0 : (count - 4) % 2 === 1) ? "blue" : "red";
+      return (firstPick.value === "blue" ? (count - 4) % 2 === 0 : (count - 4) % 2 === 1)
+        ? "blue"
+        : "red";
     }
   });
 
@@ -76,7 +78,11 @@ export const useOrderStore = defineStore("order", () => {
     }
     return uMaps;
   });
-  const tb = computed(() => curmap.value === bo.value);
+  const tb = computed(
+    () =>
+      setScores.value?.[0] + setScores.value?.[1] >= bo.value ||
+      (setScores.value?.[0] === (bo.value - 1) / 2 && setScores.value?.[1] === (bo.value - 1) / 2)
+  );
   const lastPick = computed(() => order.value.at(-1));
   const mappool = computed(() => intObjectToArray(state.data?.mappool));
   const currentMap = computed(() => state.data?.now_playing?.osu);

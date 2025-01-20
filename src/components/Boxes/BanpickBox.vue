@@ -1,7 +1,7 @@
 <script setup>
 import { computed } from "vue";
 import CslBox from "./CslBox.vue";
-import { range } from "@/assets/utils";
+import { numToTeamCol, range } from "@/assets/utils";
 import { useOrderStore } from "@/stores/order";
 
 const ov = useOrderStore();
@@ -93,12 +93,22 @@ const getPick = (boxInd) => {
               class="pickBox"
               v-for="boxInd in range(4, ov.bo === 9 ? 8 : 9)"
               :key="boxInd"
-              :style="{
-                color: getPick(boxInd)?.win === 1 ? 'var(--csl-blue)' : 'var(--csl-red)',
-                opacity: getPick(boxInd) || ov.curmap + 3 === boxOrder[boxInd] ? 1 : 0.3,
+              :style="{ opacity: getPick(boxInd) || ov.curmap + 3 === boxOrder[boxInd] ? 1 : 0.3 }"
+              :class="{
+                pulsing: getPick(boxInd)?.pick === 1 && getPick(boxInd)?.win === -1,
+                redWin: getPick(boxInd)?.win === 0,
+                blueWin: getPick(boxInd)?.win === 1,
               }"
-              :class="{ pulsing: getPick(boxInd)?.pick === 1 && getPick(boxInd)?.win === -1 }"
             >
+              <svg
+                width="20"
+                height="20"
+                viewBox="0 0 20 20"
+                class="winTicker"
+                :fill="`var(--csl-${numToTeamCol(getPick(boxInd)?.win)})`"
+              >
+                <polygon points="0,0 0,20 20,0" />
+              </svg>
               {{ getPick(boxInd)?.code || "???" }}
             </div>
           </div>
@@ -109,12 +119,22 @@ const getPick = (boxInd) => {
               class="pickBox"
               v-for="boxInd in range(9, ov.bo === 9 ? 13 : 14)"
               :key="boxInd"
-              :style="{
-                color: getPick(boxInd)?.win === 0 ? 'var(--csl-red)' : 'var(--csl-blue)',
-                opacity: getPick(boxInd) || ov.curmap + 3 === boxOrder[boxInd] ? 1 : 0.3,
+              :style="{ opacity: getPick(boxInd) || ov.curmap + 3 === boxOrder[boxInd] ? 1 : 0.3 }"
+              :class="{
+                pulsing: getPick(boxInd)?.pick === 1 && getPick(boxInd)?.win === -1,
+                redWin: getPick(boxInd)?.win === 0,
+                blueWin: getPick(boxInd)?.win === 1,
               }"
-              :class="{ pulsing: getPick(boxInd)?.pick === 1 && getPick(boxInd)?.win === -1 }"
             >
+              <svg
+                width="20"
+                height="20"
+                viewBox="0 0 20 20"
+                class="winTicker"
+                :fill="`var(--csl-${numToTeamCol(getPick(boxInd)?.win)})`"
+              >
+                <polygon points="0,0 0,20 20,0" />
+              </svg>
               {{ getPick(boxInd)?.code || "???" }}
             </div>
           </div>
@@ -123,9 +143,20 @@ const getPick = (boxInd) => {
           class="pickBox tbBox horizontal-center"
           :lessRound="true"
           :style="{ opacity: ov.tb ? 1 : 0.3 }"
-          :class="{ pulsing: ov.tb, tbDisabled: !ov.tb }"
-          >TB</CslBox
+          :class="{ pulsing: ov.tb && !numToTeamCol(getPick(14)?.win), tbDisabled: !ov.tb }"
         >
+          <svg
+            v-if="numToTeamCol(getPick(14)?.win)"
+            width="32"
+            height="32"
+            viewBox="0 0 32 32"
+            class="winTicker"
+            :fill="`var(--csl-${numToTeamCol(getPick(14)?.win)})`"
+          >
+            <polygon points="0,0 0,32 32,0" />
+          </svg>
+          TB
+        </CslBox>
       </div>
     </div>
   </div>
@@ -176,8 +207,14 @@ const getPick = (boxInd) => {
   text-align: center;
   border-radius: 8px;
   margin-bottom: 8px;
-  color: white;
   border: solid white;
+  overflow: hidden;
+}
+
+.winTicker {
+  position: absolute;
+  left: 0;
+  top: 0;
 }
 
 .tbBox {

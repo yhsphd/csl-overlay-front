@@ -36,7 +36,9 @@ onMounted(() => {
         <div class="nick novecento">{{ ov.teams?.[0]?.name }}</div>
         <div
           class="state poppins"
-          :style="{ opacity: ov.turn === 'red' && (ov.defending || !ov.playing) ? 1 : 0 }"
+          :style="{
+            opacity: ov.finished || (ov.turn === 'red' && (ov.defending || !ov.playing)) ? 1 : 0,
+          }"
         >
           {{ ov.defending ? "Defending" : "" }}
           {{ !ov.defending && !ov.finished ? "Picking" : "" }}
@@ -51,7 +53,9 @@ onMounted(() => {
         <div class="nick novecento">{{ ov.teams?.[1]?.name }}</div>
         <div
           class="state poppins"
-          :style="{ opacity: ov.turn === 'blue' && (ov.defending || !ov.playing) ? 1 : 0 }"
+          :style="{
+            opacity: ov.finished || (ov.turn === 'blue' && (ov.defending || !ov.playing)) ? 1 : 0,
+          }"
         >
           {{ ov.defending ? "Defending" : "" }}
           {{ !ov.defending && !ov.finished ? "Picking" : "" }}
