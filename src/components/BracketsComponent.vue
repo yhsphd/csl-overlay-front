@@ -1,7 +1,7 @@
 <script setup>
 import { useOverlayDataStore } from "@/stores/socket";
 import MatchComponent from "./BracketsComponent/MatchComponent.vue";
-import { computed, defineProps } from "vue";
+import { computed } from "vue";
 
 const state = useOverlayDataStore();
 

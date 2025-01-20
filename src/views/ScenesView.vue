@@ -12,5 +12,6 @@ import ConnectionInfo from "@/components/ConnectionInfo.vue";
     <router-link :to="{ name: 'analysis' }">Player Analysis</router-link>
     <router-link :to="{ name: 'camera' }">Camera</router-link>
     <router-link :to="{ name: 'banpick' }">Ban&Pick</router-link>
+    <router-link :to="{ name: 'ingame' }">Ingame</router-link>
   </main>
 </template>

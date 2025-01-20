@@ -32,7 +32,7 @@ const mapToShow = computed(() => ov.lastPickedMap);
         <OverflowText class="title poppins" :key="mapToShow?.title">
           {{ mapToShow?.artist }} - {{ mapToShow?.title }}
         </OverflowText>
-        <div class="diff poppins">[{{ mapToShow?.difficulty }}]</div>
+        <div v-if="type !== 'result'" class="diff poppins">[{{ mapToShow?.difficulty }}]</div>
         <div v-if="type === 'result'" class="scoreDiffGraph"></div>
       </div>
       <div
@@ -41,6 +41,7 @@ const mapToShow = computed(() => ov.lastPickedMap);
           backgroundColor: ov.tb ? 'black' : `var(--csl-${ov.lastPick?.team ? 'blue' : 'red'})`,
         }"
       ></div>
+      <div class="backgroundDarker"></div>
     </div>
   </div>
 </template>
@@ -69,7 +70,17 @@ const mapToShow = computed(() => ov.lastPickedMap);
   left: 0;
   width: 100%;
   height: 100%;
-  opacity: 0.8;
+  opacity: 0.5;
+}
+
+.backgroundDarker {
+  position: absolute;
+  top: 0;
+  left: 0;
+  width: 100%;
+  height: 100%;
+  background-color: black;
+  opacity: 0.3;
 }
 
 .contentWrapper {
@@ -101,8 +112,8 @@ const mapToShow = computed(() => ov.lastPickedMap);
 
 .scoreDiffGraph {
   width: 100%;
-  height: 30px;
-  margin-top: 8px;
+  height: 56px;
+  margin-top: 0;
   background-color: rgba(0, 0, 0, 0.5);
   background-image: url(@/assets/img/scoredifftest.svg);
   background-position: center;
