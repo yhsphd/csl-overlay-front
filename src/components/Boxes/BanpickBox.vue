@@ -34,7 +34,7 @@ const boxOrder = computed(() => {
     stagedBoxOrder.push(5, 7, 9, 11, 13, 4, 6, 8, 10, 12);
   }
 
-  stagedBoxOrder.push(14);
+  stagedBoxOrder.push(ov.bo === 9 ? 12 : 14);
 
   return stagedBoxOrder;
 });
@@ -100,7 +100,7 @@ const getPick = (boxInd) => {
                 blueWin: getPick(boxInd)?.win === 1,
               }"
             >
-              <svg
+              <!-- <svg
                 width="20"
                 height="20"
                 viewBox="0 0 20 20"
@@ -108,7 +108,11 @@ const getPick = (boxInd) => {
                 :fill="`var(--csl-${numToTeamCol(getPick(boxInd)?.win)})`"
               >
                 <polygon points="0,0 0,20 20,0" />
-              </svg>
+              </svg> -->
+              <div
+                class="winTicker"
+                :style="{ backgroundColor: `var(--csl-${numToTeamCol(getPick(boxInd)?.win)})` }"
+              ></div>
               {{ getPick(boxInd)?.code || "???" }}
             </div>
           </div>
@@ -126,7 +130,7 @@ const getPick = (boxInd) => {
                 blueWin: getPick(boxInd)?.win === 1,
               }"
             >
-              <svg
+              <!-- <svg
                 width="20"
                 height="20"
                 viewBox="0 0 20 20"
@@ -134,7 +138,11 @@ const getPick = (boxInd) => {
                 :fill="`var(--csl-${numToTeamCol(getPick(boxInd)?.win)})`"
               >
                 <polygon points="0,0 0,20 20,0" />
-              </svg>
+              </svg> -->
+              <div
+                class="winTicker"
+                :style="{ backgroundColor: `var(--csl-${numToTeamCol(getPick(boxInd)?.win)})` }"
+              ></div>
               {{ getPick(boxInd)?.code || "???" }}
             </div>
           </div>
@@ -208,13 +216,33 @@ const getPick = (boxInd) => {
   border-radius: 8px;
   margin-bottom: 8px;
   border: solid white;
-  overflow: hidden;
+  box-sizing: content-box;
 }
 
-.winTicker {
+/* .winTicker {
   position: absolute;
   left: 0;
   top: 0;
+} */
+
+.winTicker {
+  position: absolute;
+  top: -3px;
+  width: 16px;
+  height: 112%;
+  /* border-radius: 8px; */
+}
+
+.red .winTicker {
+  right: -4px;
+  border-top-right-radius: 8px;
+  border-bottom-right-radius: 8px;
+}
+
+.blue .winTicker {
+  left: -4px;
+  border-top-left-radius: 8px;
+  border-bottom-left-radius: 8px;
 }
 
 .tbBox {

@@ -40,14 +40,22 @@ onMounted(() => {
             opacity: ov.finished || (ov.turn === 'red' && (ov.defending || !ov.playing)) ? 1 : 0,
           }"
         >
-          {{ ov.defending ? "Defending" : "" }}
+          {{ ov.defending ? "Banning" : "" }}
           {{ !ov.defending && !ov.finished ? "Picking" : "" }}
           {{ ov.finished ? (ov.win === "red" ? "Victory" : "Defeat") : "" }}
           {{ !ov.finished ? ongoingText : "" }}
         </div>
       </div>
-      <div class="scores theJamsil">
-        <div class="absolute-center">{{ ov.setScores?.[0] }} : {{ ov.setScores?.[1] }}</div>
+      <div class="scores novecento">
+        <div class="absolute-center horizontal-box" style="width: 100%">
+          <div style="width: 50%; text-align: center">
+            {{ ov.setScores?.[0] }}
+          </div>
+          <div class="absolute-center" style="top: 52px">:</div>
+          <div style="width: 50%; text-align: center">
+            {{ ov.setScores?.[1] }}
+          </div>
+        </div>
       </div>
       <div class="playerBox blue">
         <div class="nick novecento">{{ ov.teams?.[1]?.name }}</div>
@@ -57,7 +65,7 @@ onMounted(() => {
             opacity: ov.finished || (ov.turn === 'blue' && (ov.defending || !ov.playing)) ? 1 : 0,
           }"
         >
-          {{ ov.defending ? "Defending" : "" }}
+          {{ ov.defending ? "Banning" : "" }}
           {{ !ov.defending && !ov.finished ? "Picking" : "" }}
           {{ ov.finished ? (ov.win === "blue" ? "Victory" : "Defeat") : "" }}
           {{ !ov.finished ? ongoingText : "" }}
