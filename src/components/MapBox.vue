@@ -2,43 +2,93 @@
 import { computed } from "vue";
 import OverflowText from "./OverflowText.vue";
 import { useOrderStore } from "@/stores/order";
+import ScoreDiffGraph from "./ScoreDiffGraph.vue";
+import { useOverlayDataStore } from "@/stores/socket";
+import { getMappool, intObjectToArray } from "@/assets/utils";
+
+const state = useOverlayDataStore();
 
 const props = defineProps({
   type: String,
+  horizontal: Boolean,
+  pickData: Object,
 });
 
 const ov = useOrderStore();
 
 const masterHeight = computed(() => {
-  switch (props.type) {
-    case "result":
-      return "150px";
-    default:
-      return "109px";
+  if (props.horizontal) {
+    return "109px";
+  } else if (props.type === "result") {
+    return "150px";
+  } else {
+    return "109px";
   }
 });
 
-const mapToShow = computed(() => ov.lastPickedMap);
+const mappool = computed(() => intObjectToArray(state.data?.mappool));
+const pick = computed(() => (props.pickData ? props.pickData : ov.lastPick));
+const code = computed(() => pick.value?.code);
+const map = computed(() => getMappool(mappool.value, code.value));
+const history = computed(() => state.data?.CSL?.history);
+const mapHistory = computed(() => {
+  const defaultValue = {
+    log: [],
+    score: [0, 0],
+    acc: [0, 0],
+    combo: [0, 0],
+    miss: [0, 0],
+  };
+
+  if (!code.value) {
+    return defaultValue;
+  }
+
+  return history[map.value.map_id] ? history[map.value.map_id] : defaultValue;
+});
 </script>
 
 <template>
   <div class="master-map-box">
     <div
       class="mapBox"
-      :style="{ height: masterHeight, backgroundImage: `url(${mapToShow?.background})` }"
+      :style="{ height: masterHeight, backgroundImage: `url(${map?.background})` }"
     >
-      <div class="contentWrapper">
-        <div class="code novecento">{{ mapToShow?.code }}</div>
-        <OverflowText class="title poppins" :key="mapToShow?.title">
-          {{ mapToShow?.artist }} - {{ mapToShow?.title }}
+      <div v-if="!horizontal" class="contentWrapper">
+        <div class="code novecento">{{ map?.code }}</div>
+        <OverflowText class="title poppins" :key="map?.title">
+          {{ map?.artist }} - {{ map?.title }}
         </OverflowText>
-        <div v-if="type !== 'result'" class="diff poppins">[{{ mapToShow?.difficulty }}]</div>
-        <div v-if="type === 'result'" class="scoreDiffGraph"></div>
+        <div v-if="type !== 'result'" class="diff poppins">[{{ map?.difficulty }}]</div>
+        <ScoreDiffGraph
+          v-if="type === 'result'"
+          class="scoreDiffGraph"
+          :data="mapHistory.log"
+        ></ScoreDiffGraph>
+      </div>
+      <div v-if="horizontal" class="contentWrapper horizontal-box horizontal">
+        <div class="code novecento">{{ map?.code }}</div>
+        <div style="margin-left: 16px">
+          <OverflowText class="title poppins" :key="map?.title" style="width: 410px">
+            {{ map?.artist }} - {{ map?.title }}
+          </OverflowText>
+          <div v-if="type !== 'result'" class="diff poppins">[{{ map?.difficulty }}]</div>
+          <ScoreDiffGraph
+            v-if="type === 'result'"
+            class="scoreDiffGraph"
+            :data="mapHistory.log"
+          ></ScoreDiffGraph>
+        </div>
       </div>
       <div
         class="backgroundTint"
         :style="{
-          backgroundColor: ov.tb ? 'black' : `var(--csl-${ov.lastPick?.team ? 'blue' : 'red'})`,
+          backgroundColor:
+            type === 'result'
+              ? `var(--csl-${pick?.win ? 'blue' : 'red'})`
+              : ov.tb
+                ? 'black'
+                : `var(--csl-${pick?.team ? 'blue' : 'red'})`,
         }"
       ></div>
       <div class="backgroundDarker"></div>
@@ -58,7 +108,6 @@ const mapToShow = computed(() => ov.lastPickedMap);
   border-radius: 8px;
   border: solid white 2px;
   box-sizing: border-box;
-  background-image: url(https://assets.ppy.sh/beatmaps/977796/covers/raw.jpg);
   background-position: center;
   background-size: cover;
   overflow: hidden;
@@ -70,7 +119,7 @@ const mapToShow = computed(() => ov.lastPickedMap);
   left: 0;
   width: 100%;
   height: 100%;
-  opacity: 0.5;
+  opacity: 0.6;
 }
 
 .backgroundDarker {
@@ -80,7 +129,7 @@ const mapToShow = computed(() => ov.lastPickedMap);
   width: 100%;
   height: 100%;
   background-color: black;
-  opacity: 0.3;
+  opacity: 0.5;
 }
 
 .contentWrapper {
@@ -114,10 +163,15 @@ const mapToShow = computed(() => ov.lastPickedMap);
   width: 100%;
   height: 56px;
   margin-top: 0;
-  background-color: rgba(0, 0, 0, 0.5);
-  background-image: url(@/assets/img/scoredifftest.svg);
-  background-position: center;
-  background-size: 100% 100%;
+  background-color: rgba(0, 0, 0, 0.7);
   border-radius: 8px;
+}
+
+.contentWrapper.horizontal {
+  align-items: center;
+}
+
+.horizontal .code {
+  width: 64px;
 }
 </style>

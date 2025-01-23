@@ -73,8 +73,8 @@ onMounted(() => {
         </div>
         <div class="divider"></div>
         <div class="section">
-          <Transition name="switchPage" mode="out-in"
-            ><div class="page" v-if="rightPageSwitcher.currPage === 'brackets'">
+          <Transition name="switchPage" mode="out-in">
+            <div class="page" v-if="rightPageSwitcher.currPage === 'brackets'">
               <div class="header" @click="rightPageSwitcher.advancePage">
                 <div>BRACKET</div>
                 <div style="flex-grow: 1"></div>
@@ -84,17 +84,19 @@ onMounted(() => {
                 <div class="bracketsContainer" @wheel.prevent="onWheel" ref="bracketsContainerRef">
                   <BracketsComponent class="bracket"></BracketsComponent>
                 </div>
-              </div></div
-          ></Transition>
-          <Transition name="switchPage" mode="out-in"
-            ><div class="page" v-if="rightPageSwitcher.currPage === 'sponsor'">
+              </div>
+            </div>
+          </Transition>
+          <Transition name="switchPage" mode="out-in">
+            <div class="page" v-if="rightPageSwitcher.currPage === 'sponsor'">
               <div class="header" @click="rightPageSwitcher.advancePage">
                 <div>SPONSORED BY</div>
               </div>
               <div class="content">
                 <LogoComponent class="sponsor absolute-center" type="sponsor"></LogoComponent>
-              </div></div
-          ></Transition>
+              </div>
+            </div>
+          </Transition>
         </div>
       </div>
     </IntroBox>

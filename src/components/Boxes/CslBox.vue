@@ -19,6 +19,7 @@ onMounted(() => {
 
 <template>
   <div class="master-csl-box" ref="masterRef" :style="{ borderRadius: radius + 'px' }">
+    <slot></slot>
     <svg
       class="box"
       :width="width"
@@ -44,7 +45,6 @@ onMounted(() => {
         </linearGradient>
       </defs>
     </svg>
-    <slot></slot>
   </div>
 </template>
 

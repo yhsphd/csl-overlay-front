@@ -9,6 +9,7 @@ import AnalysisScene from "@/views/Scenes/AnalysisScene.vue";
 import CameraScene from "@/views/Scenes/CameraScene.vue";
 import BanpickScene from "@/views/Scenes/BanpickScene.vue";
 import IngameScene from "@/views/Scenes/IngameScene.vue";
+import PostmatchScene from "@/views/Scenes/PostmatchScene.vue";
 
 const router = createRouter({
   history: createWebHistory(import.meta.env.BASE_URL),
@@ -67,6 +68,11 @@ const router = createRouter({
       path: "/overlay/ingame",
       name: "ingame",
       component: IngameScene,
+    },
+    {
+      path: "/overlay/postmatch",
+      name: "postmatch",
+      component: PostmatchScene,
     },
   ],
 });
